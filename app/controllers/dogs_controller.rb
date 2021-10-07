@@ -1,5 +1,6 @@
 class DogsController < ApplicationController
   before_action :set_dog, only: [:show, :edit, :update, :destroy]
+  before_action :check_can_allow_modify, only: [:edit, :update, :destroy]
 
   # GET /dogs
   # GET /dogs.json
@@ -76,5 +77,17 @@ class DogsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def dog_params
     params.require(:dog).permit(:name, :description, images: [])
+  end
+
+  # there are libraries that handle authorization very well
+  # this is a quick and dirty way to make this work
+  def check_can_allow_modify
+    if current_user != @dog.owner
+      flash[:notice] = "Cannot modify a dog you do not own"
+      respond_to do |format|
+        format.html { redirect_back(fallback_location: root_path) }
+        format.json { head :forbidden }
+      end
+    end
   end
 end
