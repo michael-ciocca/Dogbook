@@ -1,4 +1,10 @@
 <%= paginate @dogs if @dogs.try(:total_pages) %>
 
 <%= link_to "Most Recent Likes", dogs_path(params: {recent_likes: true}) %>
-<%= render partial: 'thumbnail', collection: @dogs, as: :dog %>
+
+<% @dogs.each_with_index do |dog, index| %>
+  <%= render partial: 'thumbnail', locals: { dog: dog } %>
+  <% if ((index + 1) % 2) == 0 %>
+    <img src="<%= asset_path( 'ad.jpg' ) %>" />
+  <% end %>
+<% end %>
