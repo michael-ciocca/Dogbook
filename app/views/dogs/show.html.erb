@@ -7,6 +7,8 @@
 
   <p><%= @dog.description %></p>
 
+  <%= button_to @presenter.like_button_text, dog_like_path(@dog) %>
+
   <% if current_user == @dog.owner %>
 
     <%= link_to "Edit #{@dog.name}'s Profile", edit_dog_path %>
