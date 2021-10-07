@@ -1,3 +1,4 @@
-<%= paginate @dogs %>
+<%= paginate @dogs if @dogs.try(:total_pages) %>
 
+<%= link_to "Most Recent Likes", dogs_path(params: {recent_likes: true}) %>
 <%= render partial: 'thumbnail', collection: @dogs, as: :dog %>

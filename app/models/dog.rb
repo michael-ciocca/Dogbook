@@ -6,4 +6,11 @@ class Dog < ApplicationRecord
   belongs_to :owner, class_name: "User", foreign_key: "user_id", inverse_of: :dogs, optional: true
   has_many :likes
   has_many :admirers, through: :likes, source: :user
+
+  scope :order_by_likes_in_past_hour, -> {
+    joins(:likes).
+    group(:id).
+    order(Arel.sql("count(likes.id) DESC")).
+    where("likes.created_at BETWEEN ? AND ?", (Time.current - 1.hour), Time.current)
+  }
 end

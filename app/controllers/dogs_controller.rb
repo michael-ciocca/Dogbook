@@ -5,7 +5,11 @@ class DogsController < ApplicationController
   # GET /dogs
   # GET /dogs.json
   def index
-    @dogs = Dog.order(:name).page(params[:page]).per(5)
+    if params[:recent_likes]
+      @dogs = Dog.order_by_likes_in_past_hour
+    else
+      @dogs = Dog.order(:name).page(params[:page]).per(5)
+    end
   end
 
   # GET /dogs/1
